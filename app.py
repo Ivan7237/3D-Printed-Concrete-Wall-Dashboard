@@ -3,10 +3,10 @@ import pandas as pd
 import os
 import re
 
-st.set_page_config(page_title="3D Printed Wall Concrete Wall Dashboard", layout="wide")
+st.set_page_config(page_title="3D Concrete Printing (3DCP) Wall Dashboard", layout="wide")
 
 # ---- Title & Description ----
-st.title("3D Printed Wall Concrete Wall Dashboard")
+st.title("3D Concrete Printing (3DCP) Wall Dashboard")
 st.markdown(
     """
     Welcome to the 3D Printed Concrete Wall Dashboard.  
