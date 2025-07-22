@@ -91,7 +91,7 @@ if st.session_state.get('run_pipeline', False):
     st.header("Matrix Validation: PCA Rotation and XY Translation")
     if matrix_img_file and os.path.exists(matrix_img_file):
         st.subheader("Matrix Transformation Validation Image")
-        st.image(matrix_img_file, caption="Matrix Transformation Validation", width=900)  # set width here!
+        st.image(matrix_img_file, caption="Matrix Transformation Validation", width=900)
     else:
         st.info("No matrix validation image found.")
 
@@ -105,14 +105,29 @@ if st.session_state.get('run_pipeline', False):
         st.subheader("Descriptive Statistics")
         st.dataframe(df.describe(), use_container_width=True)
 
-        st.subheader("Max, Min, Mean, Variance, Std, Height")
-        st.write("Max Area (mm2):", df["Area_mm2"].max())
-        st.write("Min Area (mm2):", df["Area_mm2"].min())
-        st.write("Mean Area (mm2):", df["Area_mm2"].mean())
-        st.write("Area Variance (mm2):", df["Area_mm2"].var())
-        st.write("Area Standard Deviation (mm2):", df["Area_mm2"].std())
-        st.write("Max Height (mm):", df["Height_mm"].max())
-        st.write("Min Height (mm):", df["Height_mm"].min())
+        # --- CLEANED STATISTICS SECTION ---
+        st.subheader("Key Area Statistics")
+
+        # Max area and its height
+        max_area = df["Area_mm2"].max()
+        max_area_idx = df["Area_mm2"].idxmax()
+        max_area_height = df.loc[max_area_idx, "Height_mm"]
+
+        # Min area and its height
+        min_area = df["Area_mm2"].min()
+        min_area_idx = df["Area_mm2"].idxmin()
+        min_area_height = df.loc[min_area_idx, "Height_mm"]
+
+        # Mean, variance, std
+        mean_area = df["Area_mm2"].mean()
+        var_area = df["Area_mm2"].var()
+        std_area = df["Area_mm2"].std()
+
+        st.write(f"Max Area: {max_area:.2f} mm² at Height: {max_area_height:.2f} mm")
+        st.write(f"Min Area: {min_area:.2f} mm² at Height: {min_area_height:.2f} mm")
+        st.write(f"Mean Area: {mean_area:.2f} mm²")
+        st.write(f"Area Variance: {var_area:.2f}")
+        st.write(f"Area Standard Deviation: {std_area:.2f}")
 
         st.subheader("Download Aligned Summary CSV")
         st.download_button("Download aligned summary CSV", df.to_csv(index=False),
@@ -121,7 +136,7 @@ if st.session_state.get('run_pipeline', False):
         st.info("No summary CSV found.")
 
     # --- Eccentricity and Angle Section ---
-    st.header("Eccentricity and Angle Info & Table (Aligned Slice Summary with Eccentricity and Angles)")
+    st.header("Absolute Eccentricity and Angle Info & Table (Aligned Slice Summary with Eccentricity and Angles)")
     if df_ecc is not None:
         z_ref = df_ecc["Height_mm"].iloc[0]
         x_col = [col for col in df_ecc.columns if "centroid" in col.lower() and "x" in col.lower()]
@@ -144,10 +159,10 @@ if st.session_state.get('run_pipeline', False):
         </div>
         """, unsafe_allow_html=True)
 
-        st.subheader("Full Eccentricity and Angle CSV Table")
+        st.subheader("Absolute Eccentricity and Angle CSV Table")
         st.dataframe(df_ecc, use_container_width=True)
 
-        st.subheader("Download Eccentricity and Angle CSV")
+        st.subheader("Download Absolute Eccentricity and Angle CSV")
         st.download_button(
             "Download eccentricity and angle CSV", df_ecc.to_csv(index=False),
             file_name="eccentricity_and_angle.csv", mime="text/csv"
@@ -161,7 +176,7 @@ if st.session_state.get('run_pipeline', False):
     st.subheader("Centroid Drift (Interactive HTML)")
     st.components.v1.html(centroid_html_str, height=1050, scrolling=True)
 
-    st.subheader("Eccentricity vs Height (Interactive HTML)")
+    st.subheader("Absolute Eccentricity vs Height (Interactive HTML)")
     st.components.v1.html(ecc_html_str, height=1050, scrolling=True)
 
     st.subheader("Print & Export Tips")
