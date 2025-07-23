@@ -126,8 +126,8 @@ if st.session_state.get('run_pipeline', False):
         st.write(f"Max Area: {max_area:.2f} mm² at Height: {max_area_height:.2f} mm")
         st.write(f"Min Area: {min_area:.2f} mm² at Height: {min_area_height:.2f} mm")
         st.write(f"Mean Area: {mean_area:.2f} mm²")
-        st.write(f"Area Variance: {var_area:.2f}")
-        st.write(f"Area Standard Deviation: {std_area:.2f}")
+        st.write(f"Area Variance: {var_area:.2f} mm²")
+        st.write(f"Area Standard Deviation: {std_area:.2f} mm²")
 
         st.subheader("Download Aligned Summary CSV")
         st.download_button("Download aligned summary CSV", df.to_csv(index=False),
